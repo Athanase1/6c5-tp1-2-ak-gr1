@@ -57,4 +57,31 @@ public class PatrouilleAgent : MonoBehaviour
         dernierButIndex = nouvelIndex;
         agent.SetDestination(buts[nouvelIndex].position);
     }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ZoneRamper") && !anim.GetBool("estSousObstacle"))
+        {
+            anim.SetBool("estSousObstacle", true);
+            agent.speed = 0.5f;
+
+            CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+            capsule.height = 0.5f;
+            capsule.center = new Vector3(0, 0.25f, 0);
+            Debug.Log("Début réel du rampement");
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("ZoneRamper") && anim.GetBool("estSousObstacle"))
+        {
+            // On attend que le zombie soit vraiment sorti avant de se relever
+            anim.SetBool("estSousObstacle", false);
+
+            CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+            capsule.height = 2.0f;
+            capsule.center = new Vector3(0, 1.0f, 0);
+            Debug.Log("Fin réelle du rampement");
+        }
+    }
 }
