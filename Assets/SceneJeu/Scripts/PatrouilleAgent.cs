@@ -29,6 +29,34 @@ public class PatrouilleAgent : MonoBehaviour
         {
             StartCoroutine(SequenceAtteinteBut());
         }
+        if (anim.GetBool("estSousObstacle") && !EstDansZoneRamper())
+        {
+            SortirRampement();
+        }
+    }
+    bool EstDansZoneRamper()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, 0.5f);
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("ZoneRamper"))
+                return true;
+        }
+        return false;
+    }
+
+    void SortirRampement()
+    {
+        anim.SetBool("estSousObstacle", false);
+        agent.speed = 3.5f;
+
+        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
+        capsule.height = 2.0f;
+        capsule.center = new Vector3(0, 1.0f, 0);
+
+        agent.height = 2.0f;
+
+        Debug.Log("Sortie forcée du rampement");
     }
 
     IEnumerator SequenceAtteinteBut()
@@ -63,7 +91,7 @@ public class PatrouilleAgent : MonoBehaviour
         {
             anim.SetBool("estSousObstacle", true);
             agent.speed = 0.5f;
-
+            agent.height = 0.5f;   // quand il rampe
             CapsuleCollider capsule = GetComponent<CapsuleCollider>();
             capsule.height = 0.5f;
             capsule.center = new Vector3(0, 0.25f, 0);
@@ -75,8 +103,9 @@ public class PatrouilleAgent : MonoBehaviour
     {
         if (other.CompareTag("ZoneRamper") && anim.GetBool("estSousObstacle"))
         {
-            // On attend que le zombie soit vraiment sorti avant de se relever
             anim.SetBool("estSousObstacle", false);
+            agent.speed = 3.5f; // Remets ici la vitesse d'origine de ton agent (vu dans ton inspecteur)
+            agent.height = 2.0f;
 
             CapsuleCollider capsule = GetComponent<CapsuleCollider>();
             capsule.height = 2.0f;
