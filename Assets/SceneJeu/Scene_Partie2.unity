@@ -13717,7 +13717,11 @@ MonoBehaviour:
   - {fileID: 950255925}
   - {fileID: 409351723}
   - {fileID: 256413858}
+  distanceSeuilMarche: 4
+  vitesseMarche: 1.5
+  vitesseCourse: 3.5
   nomDeLaZoneRamper: ZoneRamper
+  vitesseRamper: 1
 --- !u!136 &926861666
 CapsuleCollider:
   m_ObjectHideFlags: 0
